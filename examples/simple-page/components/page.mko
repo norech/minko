@@ -1,7 +1,7 @@
 <script prerender>
     const { className, user } = this.props;
     const children = this.children;
-    
+
     this.setVariables({ className, user, children });
 </script>
 

@@ -44,21 +44,26 @@ function retrieveTemplateFromTag(component: Component, tag: Tag) {
             throw `${component.name} > Script body expected.`;
         }
 
-        let scriptFnc: () => void;
+        let scriptFnc: () => Promise<void>;
 
         if (typeof module !== 'undefined' && typeof component.file !== 'undefined') {
             const m = new (module.constructor as any)();
             m.paths = module.paths;
             // TODO: Find a better way to create a module function
+            // Note: I removed the children eval() part because I wanted access to "await".
             m._compile(`
-            module.exports = function() {
-                eval(${JSON.stringify(tag.children)});
+            module.exports = async function() {
+                ${tag.children}
             };
             `,         component.file);
             scriptFnc = m.exports;
         } else {
             // tslint:disable-next-line:no-function-constructor-with-string-args
-            scriptFnc = new Function(tag.children) as () => void;
+            scriptFnc = new Function(`
+            return (async function() {
+                ${tag.children}
+            })();
+            `) as () => Promise<void>;
         }
 
         if ('prerender' in tag.props) {

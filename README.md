@@ -16,8 +16,9 @@ var minko = new Minko();  // We create a new Minko instance
 
 minko.addComponentFromFile("my-component", /* A Minko monofile path */);  // We load a component from a monofile
 
-const htmlCode = minko.renderToString("my-component");  // We render my-component and return an html code 
+const htmlCode = await minko.renderToString("my-component");  // We render my-component and get an async html code (1)
 ```
+*1: To use await, you will need to be inside an async method. If it isn't the case, consider using Promise "then" and "catch" methods*
 
 See examples folder to see how powerful Minko is.
 

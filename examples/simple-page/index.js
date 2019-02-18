@@ -8,4 +8,6 @@ minko.addComponentFromFile("app", componentsRoot + "/app.mko");
 minko.addComponentFromFile("page", componentsRoot + "/page.mko");
 
 
-console.log(minko.renderToString("app"));
+minko.renderToString("app")
+    .then(html => console.log(html))
+    .catch(err => console.error(err));

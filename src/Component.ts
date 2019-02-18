@@ -6,7 +6,7 @@ import { ComponentElement } from './dom/ComponentElement';
 export interface Templates {
     markup: string;
     style: string;
-    scripts: { [key: string]: (this: ComponentElement) => void; };
+    scripts: { [key: string]: (this: ComponentElement) => Promise<void>; };
 }
 
 export class Component {
@@ -29,7 +29,7 @@ export class Component {
      * @internal
      * Handlebars cache
      */
-    private _handlebarsCache: any = {};
+    public _handlebarsCache: any = {};
 
     /**
      * Creates a new component instance. Prefer using `Milk#addComponent` instead.
@@ -69,66 +69,6 @@ export class Component {
             console.warn(`> An error occured when trying to initialize ${this.name} component with Handlebars.`);
             throw error;
         }
-    }
-
-    /**
-     * @internal
-     * Renders components and return raw markup (HTML string) and style (CSS string).
-     * Does **not** parse child components, it only preprocess component himself.
-     * Parsing of child component is done by `Milk#_generateComponent` using internal DOM.
-     * @param props Passed properties
-     */
-    public _rawRender(dom: ComponentElement) {
-        let renderer = {
-            markup: '',
-            style: '',
-        };
-
-        try {
-            const scripts = this.templates.scripts;
-
-            if (typeof scripts !== 'undefined' && typeof scripts.prerender !== 'undefined') {
-                scripts.prerender.call(dom);
-            }
-
-            const variables = dom.variables;
-
-            renderer = {
-
-                markup: 'markup' in this._handlebarsCache
-                            ? this._handlebarsCache.markup(variables)
-                            : '',
-
-                style:  'style' in this._handlebarsCache
-                            ? this._handlebarsCache.style(variables)
-                            : '',
-
-            };
-
-            if (!('markup' in this._handlebarsCache) && renderer.markup === '') {
-                console.warn(`${this.name} > This component does not render any HTML because you do not have any <template> tag.`);
-            }
-
-        } catch (error) {
-            console.warn(`> An error occured when trying to render ${this.name} component.`);
-            throw error;
-        }
-
-        return renderer;
-    }
-
-    /**
-     * @internal
-     * Generate component DOM object.
-     * @param props Passed property
-     */
-    public _render(dom: ComponentElement) {
-        const { markup, style } = this._rawRender(dom);
-        this.minko._cssString += `\n${style}`;
-
-        const htmlNode = htmlParser.parse(markup) as htmlParser.HTMLElement;
-
-        return htmlNode;
     }
 }
 

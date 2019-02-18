@@ -1,0 +1,13 @@
+<script prerender>
+    await new Promise(ok => setTimeout(ok, 200)); // For example, you have an async job
+    this.setVariables({
+        myVar: "value"
+    });
+</script>
+
+<template>
+    <div>
+        {{ myVar }}
+    </div>
+</template>
+

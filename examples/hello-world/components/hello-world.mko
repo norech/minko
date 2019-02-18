@@ -1,7 +1,7 @@
 <template>
     <div class="hello_world">
         Hello World!
-    </page>
+    </div>
 </template>
 
 <style>

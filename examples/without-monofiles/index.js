@@ -22,4 +22,6 @@ minko.addComponent('my-component', {
     `,
 });
 
-console.log(minko.renderToString("my-component"));
+minko.renderToString("my-component")
+    .then(html => console.log(html))
+    .catch(err => console.error(err));

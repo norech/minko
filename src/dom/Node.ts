@@ -53,15 +53,16 @@ export abstract class Node {
     }
 
     /**
+     * @async
      * Renders the current Node
      * @param newNode Node to replace
      */
-    render(newNode?: htmlParser.Node): htmlParser.Node {
+    async render(newNode?: htmlParser.Node): Promise<htmlParser.Node> {
         if (typeof newNode !== 'undefined') {
             this._nodeElement = newNode;
         }
 
-        // We shallow a copy if node instance
+        // We shallow a copy of node instance
         const nodeElement: htmlParser.Node = Object.assign(
             Object.create(
                 Object.getPrototypeOf(this._nodeElement),
@@ -70,7 +71,7 @@ export abstract class Node {
         );
 
         // Set children nodes to rendered nodes
-        nodeElement.childNodes = this.children.map(node => node.render());
+        nodeElement.childNodes = await Promise.all(this.children.map(node => node.render()));
         return nodeElement;
     }
 

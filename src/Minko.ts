@@ -71,7 +71,7 @@ export class Minko {
      * Renders a component to a string
      * @param rootComponent Component name
      */
-    public renderToString(rootComponent: string) {
+    public async renderToString(rootComponent: string) {
         // _cssString will be appended by component elements, so we reset it before every rendering.
         this._cssString = '';
 
@@ -85,7 +85,7 @@ export class Minko {
         const renderedDOM = new htmlParser.HTMLElement(null as unknown as string, {});
 
         // We put component rendered element in rendered DOM
-        renderedDOM.appendChild(component.render());
+        renderedDOM.appendChild(await component.render());
 
         // We add a <style> tag at end containing every styles
         if (this._cssString.trim().length > 0) {
