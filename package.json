@@ -4,7 +4,7 @@
     "node-html-parser": "^1.1.12"
   },
   "name": "minko",
-  "version": "0.0.0",
+  "version": "0.0.0-dev.2",
   "main": "build/index.js",
   "license": "MIT",
   "author": "Alexis Norech <alexis.norech@gmail.com>",
