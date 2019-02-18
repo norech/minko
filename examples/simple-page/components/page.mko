@@ -1,0 +1,18 @@
+<script prerender>
+    const { className, user } = this.props;
+    const children = this.children;
+    
+    this.setVariables({ className, user, children });
+</script>
+
+<template>
+    <div class="{{ className }}">
+        <nav>
+            <a href="http://github.com/">GitHub</a>
+            <a href="/account">{{ user }}</a>
+        </nav>
+        <main>
+            {{ children }}
+        </main>
+    </div>
+</template>

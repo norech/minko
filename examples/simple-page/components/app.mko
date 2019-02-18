@@ -1,0 +1,19 @@
+<script prerender>
+    this.setVariables({
+        username: "John Doe"
+    });
+</script>
+
+<template>
+    <page class="app_page" user="{{ username }}">
+        Hello World!
+    </page>
+</template>
+
+<style>
+    #app_page {
+        font-size: 8em;
+        text-align: center;
+    }
+</style>
+
