@@ -11,12 +11,6 @@ export class Minko {
      */
     public _components: { [key: string]: Component; } = {};
 
-    /**
-     * @internal
-     * Generated CSS string
-     */
-    public _cssString: string = '';
-
     constructor() {
         //
     }
@@ -71,15 +65,16 @@ export class Minko {
     /**
      * Renders a component to a string
      * @param rootComponent Component name
+     * @param props Properties passed to the rendered component
      */
-    public async renderToString(rootComponent: string) {
+    public async renderToString(rootComponent: string, props: { [key: string]: any } = {}) {
         const scope: NodeScope = {
             minkoInstance: this,
             cssString: '',
         };
 
         // This element represents the component
-        const componentHTMLElement = new htmlParser.HTMLElement(rootComponent, {});
+        const componentHTMLElement = new htmlParser.HTMLElement(rootComponent, { ...props });
 
         const component = new ComponentElement(rootComponent, componentHTMLElement, scope);
 
@@ -89,9 +84,9 @@ export class Minko {
         renderedDOM.appendChild(await component.render());
 
         // We add a <style> tag at end containing every styles
-        if (this._cssString.trim().length > 0) {
+        if (scope.cssString.trim().length > 0) {
             const styleTag = new htmlParser.HTMLElement('style', {});
-            styleTag.set_content(this._cssString);
+            styleTag.set_content(scope.cssString);
             renderedDOM.appendChild(styleTag);
         }
 
