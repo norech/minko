@@ -1,7 +1,8 @@
 import * as htmlParser from 'node-html-parser';
 import { HTMLElement } from './HTMLElement';
-import { NodeScope } from './Node';
+import { NodeScope, Node } from './Node';
 import { Component } from '../Component';
+import { NodeArray } from './NodeArray';
 
 export class ComponentElement extends HTMLElement {
     public _component: Component;
@@ -43,8 +44,19 @@ export class ComponentElement extends HTMLElement {
                 await scripts.prerender.call(this);
             }
 
-            const variables = this.variables;
             const handlebarsCache = this._component._handlebarsCache;
+
+            const variables = { ...this.variables };
+            for (const key in variables) {
+                const variable = variables[key];
+
+                // We render variables before passing them to handlebars
+                if (variable instanceof Node) {
+                    variables[key] = (await variable.render()).toString();
+                } else if (variable instanceof NodeArray) {
+                    variables[key] = (await variable.render()).join('');
+                }
+            }
 
             renderer = {
 
@@ -82,10 +94,6 @@ export class ComponentElement extends HTMLElement {
         const newHtmlElement = htmlParser.parse(markup) as htmlParser.HTMLElement;
 
         return super.render(newHtmlElement);
-    }
-
-    toString() {
-        return this.render().toString();
     }
 
     /**

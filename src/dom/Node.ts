@@ -72,11 +72,7 @@ export abstract class Node {
         );
 
         // Set children nodes to rendered nodes
-        nodeElement.childNodes = await Promise.all(this.children.map(node => node.render()));
+        nodeElement.childNodes = await this.children.render();
         return nodeElement;
-    }
-
-    toString() {
-        return this.render().toString();
     }
 }

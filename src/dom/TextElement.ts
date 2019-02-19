@@ -12,8 +12,4 @@ export class TextElement extends Node {
     get text() {
         return this._textElement.text;
     }
-
-    toString() {
-        return this.text;
-    }
 }

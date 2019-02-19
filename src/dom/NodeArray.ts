@@ -1,3 +1,4 @@
+import * as htmlParser from 'node-html-parser';
 import { Node } from './Node';
 
 export class NodeArray<T extends Node> extends Array<T> {
@@ -10,7 +11,7 @@ export class NodeArray<T extends Node> extends Array<T> {
         Object.setPrototypeOf(this, NodeArray.prototype);
     }
 
-    toString() {
-        return this.join('');
+    async render(): Promise<htmlParser.Node[]> {
+        return Promise.all(this.map(node => node.render()));
     }
 }
