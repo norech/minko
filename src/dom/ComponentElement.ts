@@ -77,7 +77,7 @@ export class ComponentElement extends HTMLElement {
     async render() {
         const { markup, style } = await this._rawRender();
         // We add component stylings to rendered CSS.
-        this.minko._cssString += `\n${style}`;
+        this._scope.cssString += `\n${style}`;
 
         const newHtmlElement = htmlParser.parse(markup) as htmlParser.HTMLElement;
 

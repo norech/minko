@@ -4,6 +4,7 @@ import { NodeArray } from './NodeArray';
 
 export interface NodeScope {
     minkoInstance: Minko;
+    cssString: string;
 }
 
 export abstract class Node {

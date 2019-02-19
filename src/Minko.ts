@@ -2,6 +2,7 @@ import { Component, Templates } from './Component';
 import * as htmlParser from 'node-html-parser';
 import { createComponentFromMonofileText } from './monofile';
 import { ComponentElement } from './dom/ComponentElement';
+import { NodeScope } from './dom/Node';
 
 export class Minko {
     /**
@@ -72,15 +73,15 @@ export class Minko {
      * @param rootComponent Component name
      */
     public async renderToString(rootComponent: string) {
-        // _cssString will be appended by component elements, so we reset it before every rendering.
-        this._cssString = '';
+        const scope: NodeScope = {
+            minkoInstance: this,
+            cssString: '',
+        };
 
         // This element represents the component
         const componentHTMLElement = new htmlParser.HTMLElement(rootComponent, {});
 
-        const component = new ComponentElement(rootComponent, componentHTMLElement, {
-            minkoInstance: this,
-        });
+        const component = new ComponentElement(rootComponent, componentHTMLElement, scope);
 
         const renderedDOM = new htmlParser.HTMLElement(null as unknown as string, {});
 
